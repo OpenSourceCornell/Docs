@@ -1,14 +1,20 @@
 \ProvidesPackage{internal}
 
+%Pull in required packages
 \usepackage[left=1.5cm,right=1.5cm,top=1.5cm,bottom=3cm]{geometry}
 \usepackage{graphicx}	%Images
 \usepackage{fancyhdr}	%Headers
 \usepackage{amsfonts}	%Math Fonts and special characters
 \usepackage{amsmath}	%Math environments
+\usepackage{embedfile}
 
+%Embed the source in the file
+\embedfile{\jobname.tex}
+\embedfile{../internal.sty}
+
+%Set the header & footer
 \setlength{\headheight}{1.5cm}
 \pagestyle{fancy}	%enable fancy header
-
 \rhead{\today}
 \chead{\topic}
 \lhead{Cornell Open Source Aficionados}
