@@ -1,0 +1,159 @@
+\documentclass[10pt,letterpaper,oneside]{article}
+
+\usepackage{../internal}
+
+\newcommand{\topic}{Writing in \LaTeX~Guide}
+
+\begin{document}
+\section{Basic Document}
+A very basic document would consist of something like the following in a plain text file with a \verb+.tex+ extension.
+\begin{verbatim}
+\documentclass{article}
+\begin{document}
+\end{document}
+\end{verbatim}
+
+\section{Text Content}
+Text content should be composed just as you would write text in any other document---nothing special---except for a few tricks to do things you can't with plain text.
+\begin{itemize}
+\item Quotes are written as  \`{}\`{}quote here' '---with two back--ticks, and two apostrophes. For single quotes, use one back-tick and one apostrophe.
+\item Hyphens should be made with one minus signs (ie~\verb+-+~), dashes indicating a range of numbers should be made with two minus signs (ie~\verb+--+~), and dashes in sentences should be made with three minus signs (ie~\verb+---+~).
+\item Percent signs denote comments in \LaTeX~(which should be used) but to create a percent sign use \verb+\%+.
+\item Dollar signs and ampersands should be prefixed with a backslash. (ie \verb+\$+ and \verb+\&+ )
+\item Paragraphs are made by leaving a blank line, with no indentation necessary:
+\begin{verbatim}
+Paragraph number one text...
+
+Paragraph number two text...
+\end{verbatim}
+\end{itemize}
+
+\section{Sectioning}
+A document can be separated into a hierarchical structure (and the table of contents automatically updated) by using the following lines in the document:
+\begin{enumerate}
+\item \verb+\section{Section Name}+
+\item \verb+\subsection{SubSection Name}+
+\item \verb+\subsubsection{SubSubSection Name}+
+\item \verb+\paragraph{Paragraph Name}+
+\item \verb+\subparagraph{SubParagraph Name}+
+\end{enumerate}
+
+\section{Tables}
+
+\subsection{Including Tables}
+For clarity and organization, I recommend that tables be composed as separate files and included in documents as follows.
+\begin{verbatim}
+\begin{table}[tb]
+\input{tables/tablename.tex}
+\caption{Caption for the Table}
+\label{tab:referencetag}
+\end{table}
+\end{verbatim}
+This example assumes that the table file is located in a sub-folder called \verb+tables+. Also, in this example, \verb+tab:referencetag+ is the text string which is used to reference the table in the text of the document, so make is descriptive (but without spaces or numbers).
+
+\subsection{Making Tables}
+Making tables in \LaTeX~can become very complex, so only what is necessary to make a simple table will be addressed here. (For further information, please visit the tables section [\verb+https://en.wikibooks.org/wiki/LaTeX/Tables+] of the \LaTeX~documentation website.) Figure~\ref{fig:sampletab} is an example of how to create a basic table in \LaTeX.
+
+\begin{figure}[htb]
+\begin{minipage}[c]{0.5\linewidth}
+\begin{verbatim} 
+\begin{tabular}{ r || r | c | l }
+Parameter & Num1 & Num2 & Num3 \\ \hline \hline
+Param1 & 23 & 32 & 86 \\
+Param2 & 26 & 51 & 19 \\ \hline
+Param3 & 32 & 80 & 31 \\ 
+\end{tabular}
+\end{verbatim}
+\end{minipage}
+\hspace{.5cm}
+\begin{minipage}[c]{0.5\linewidth}
+\begin{tabular}{ r || r | c | l }
+Parameter & Num1 & Num2 & Num3 \\ \hline \hline
+Param1 & 23 & 32 & 86 \\
+Param2 & 26 & 51 & 19 \\ \hline
+Param3 & 32 & 80 & 31 \\ 
+\end{tabular}
+\end{minipage}
+\caption{Sample Table}
+\label{fig:sampletab}
+\end{figure}
+
+As shown, ampersand symbols (~\verb+&+~) are used to separate columns within a row. Rows are placed on new lines with two backslashes (~\verb+\\+~) separating them. To define the alignment of each column, \verb+r c l+ are used to denote right, center, and left alignment, respectively. Pipes \verb+|+ are used to denote either one or two lines dividing columns. To divide rows, \verb+\hline+ is placed in between the rows it will separate.
+
+\section{Figures}
+Figures (images) are included in a document in much the same way as tables.
+\begin{verbatim}
+\begin{figure}[tb]
+\includegraphics{figures/imagename.png}
+\caption{Caption for the Image}
+\label{fig:referencetag}
+\end{figure}
+\end{verbatim}
+This example assumes that the image file is located in a sub--folder called \verb+figures+. It should be noted that \LaTeX~accepts PNG and JPEG images. For simplicity, do not include spaces in the filename. Also, in this example, \verb+fig:referencetag+ is the text string which you will use to reference the figure in the text of the document, so make is descriptive (but without spaces or numbers).
+
+Note: \verb+\usepackage{graphicx}+ must be before \verb+\begin{document}+ if you would like to include images. 
+
+\section{Internal Referencing}
+In a technical document, one is often required to reference tables, figures and other sections. To reference tables or figures use \verb+Table~\ref{tab:referencetag}+ and \verb+Figure~\ref{fig:referencetag}+ respectively.
+
+To reference a section, one must first include a label to reference the section with. Under the \verb+\section{. . .}+ line, \verb+\label{sec:sectiontag}+ can be used to label a section where \verb+sectiontag+ is a text string related to the content. To then reference this section from another, use \verb+Section~\ref{sec:sectiontag}+.
+
+\section{Equations}
+A complete explanation of formatting equations in \LaTeX is far beyond this document, though Figure~\ref{fig:eq} gives an example. Further information can be found in the mathematics section [\verb+https://en.wikibooks.org/wiki/LaTeX/Mathematics+] of the \LaTeX~documentation website.
+
+\begin{figure}[htb]
+\begin{minipage}[c]{0.5\linewidth}
+\begin{verbatim} 
+\begin{equation}
+x=\sin \left( \cfrac{1}{\sqrt[3]{\omega_0}} \right)
+\end{equation}
+\end{verbatim}
+\end{minipage}
+\hspace{.5cm}
+\begin{minipage}[c]{0.5\linewidth}
+\begin{equation}
+x=\sin \left( \cfrac{n^{5}}{\sqrt[3]{\omega_0}} \right)
+\end{equation}
+\end{minipage}
+\caption{Sample Equation}
+\label{fig:eq}
+\end{figure}
+
+\section{Packages}
+If any special features of \LaTeX~are required to typeset the desired content, they will likely require additional packages. To include a package, simply put \verb+usepackage{packagename}+ between the \verb+\documentclass+ and \verb+\begin{document}+ lines.
+
+\section{Pronunciation}
+\LaTeX~ is generally pronounced either LAY-TEK or LAH-TEK (though I prefer the latter due to the fact that it was derived from Leslie Lamport's last name) with the emphasis on the second syllable.
+
+\section{Further Information}
+All the functions of \LaTeX~cannot be covered in one short document---this was just meant to get you going. The \LaTeX~documentation website [\verb+https://en.wikibooks.org/wiki/LaTeX+] is a great reference for all the finer details.
+
+\section{Sample Document}
+\begin{verbatim}
+\documentclass[10pt,letterpaper,oneside]{article}
+
+\usepackage{fullpage}
+
+\begin{document}
+\author{Your Name}
+\title{The Title}
+\maketitle
+
+\section{Some Section}
+Content!
+
+\end{document}
+\end{verbatim}
+
+\section{Software}
+To get started with \LaTeX~all you really need is a text editor and a \LaTeX~\emph{distribution}, however I recommend installing a front end if you prefer not to use the command line---or just to get started even if you do.
+
+On all operating systems, I recommend installing the TeXworks front-end for \LaTeX~ which has syntax highlighting and will show you your finished document alongside the plain text file.
+\subsection{GNU/Linux}
+TeX Live is the most common \LaTeX~\emph{distribution} used on GNU/Linux, and is likely available through your package manager (ie. \verb+sudo apt-get install texlive+)
+\subsection{Mac OS}
+MacTeX is the most common \LaTeX~\emph{distribution} used on Mac OS, and can be installed the same as any other piece of software.
+\subsection{Microsoft Windows}
+MiKTeX is the most common \LaTeX~\emph{distribution} used on Microsoft Windows, and can be installed the same as any other piece of software.
+
+\end{document}
