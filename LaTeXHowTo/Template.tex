@@ -1,0 +1,57 @@
+\documentclass[11pt,letterpaper]{article}
+
+%DOCUMENT INFORMATION
+\title{Document Title}
+\author{First Author Name \and Second Author Name}
+\date{\today}
+
+%PACKAGES
+\usepackage{graphicx} % for images
+\usepackage{fullpage} % 1" margins
+\usepackage[breaklinks=true,colorlinks=true,linkcolor=black,urlcolor=blue]{hyperref} % for clickable links
+\usepackage{amsmath}  % for equations
+\usepackage{embedfile} % for attaching the .tex file to the PDF
+\embedfile{\jobname.tex} % embed the source
+
+%NOTES
+% To generate the table of contents, compile the document TWICE without deleting the temporary .aux files
+
+% DOCUMENT
+\begin{document}
+
+\maketitle
+\tableofcontents % Compile TWICE without deleting .aux file!
+
+\section{Section Name}
+Paragraph text. Link to \url{http://www.cornell.edu} using \verb+\url+.
+
+\subsection{Subsection Name}
+Paragraph text. Link to \href{http://www.cornell.edu}{www.cornell.edu} using \verb+\href+.
+
+\subsubsection{SubSubSection Name}
+Paragraph text with footnote\footnote{This is is a footnote.}.
+
+\paragraph{Paragraph Name}
+Paragraph text.
+
+\section{Including Images and Text}
+\subsection{Images}
+Since we want to keep this to one file, we'll wrap the command to include an external image in a code (``verbatim") environment. To actually include the image, get rid of the \verb+begin{verbatim}+ and \verb+end{verbatim}+. Make sure the images are in the same folder as the .tex file, or specify a path.
+
+\begin{verbatim}
+\begin{figure}[t]
+\centering
+\includegraphics[width=.5\textwidth]{filename.jpg}
+\caption{This is a caption.}
+\label{imagelabel}
+\end{figure}
+\end{verbatim}
+
+\subsection{Other LaTeX files}
+
+You can break up the document into multiple files and combine the documents with \verb+\input{filename.tex}+. This is useful if multiple people are contributing to a paper and are each in charge of a section.
+
+\section{Further Reference}
+\url{http://en.wikibooks.org/wiki/LaTeX/}
+
+\end{document}
