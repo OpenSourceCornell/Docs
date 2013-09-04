@@ -1,4 +1,7 @@
 Docs
 ====
 
-COSA Developed Documentation
+Open Source Cornell Documents:
+- Example Files
+- Posters
+- Templates
