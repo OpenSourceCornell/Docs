@@ -1,0 +1,468 @@
+\documentclass{article}
+\usepackage{url}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{listings}
+\pagestyle{empty}
+
+\begin{document}
+\part*{Getting Started with GPG on OS X}
+The GPG Suite for OS X gives you a simple GUI for creating and
+managing your GPG keys, as well as plugins for integrating PGP with
+your OS X programs.  The following instructions take you through
+installing GPG Suite and generating a keypair.  The settings suggested
+here will increase the security of your key and are strongly
+recommended!
+
+If in doubt, come on \texttt{\#opensourcecornell} on Freenode and ask
+for help!
+
+\section*{Install GPG Suite and Setup Keypair}
+
+\begin{enumerate}
+\item Go to \url{https://gpgtools.org/} and download the \textit{GPG
+    Suite}.
+\item Run the installer.
+\item The application ``GPG Keychain Access'' will pop up after the
+  installation is complete.  This will allow you to generate a new
+  keypair.  Keep ``Upload key after generation.'' unchecked.  Enter
+  your name and email address, click ``Advanced Options,'' and
+  increase the key length to 4096.  You don't need (or want) a
+  comment.  \textbf{Take note of when your key expires!  You can
+    always change the expiration date later!}
+\item Generate the keypair.  You'll need to enter a passphrase and
+  wait for the keypair to be generated.  This passphrase is the last
+  line of defense if your private key is compromised, and you will
+  need to enter it when you sign or decrypt messages.  \textbf{Do not
+    forget this passphrase!}
+\item Once your keypair has been generated, select it, go to the menu,
+  and select ``Key$>$Generate Revoke Certificate\dots''.  Don't give a
+  reason (this is in case anything ever happens).  Your revocation
+  certificate will let you revoke this key if it ever gets stolen.
+  Keep it in a secure place (not, for instance, on your desktop).
+\item Go to the menu and select ``GPG Keychain
+  Access$>$Preferences\dots''.  Change the keyserver to
+  \url{hkps://hkps.pool.sks-keyservers.net}.  The HKPS protocol is
+  more secure, because it sends the keys over an encrypted
+  connection.
+\item If you have more email addresses and names that you plan to use
+  this key under, double click on the key, go to the User IDs tab, and
+  click the first \texttt{+} button.  You will be prompted to add
+  another name and email address (and comment, which again, you
+  probably don't need or want).  By selecting a User ID, you can click
+  the ``primary'' button to make it the name and email that others
+  will see by default.
+\item When you are done setting up your key, select it, go to the
+  menu and select ``Key$>$Send public key to Keyserver''.
+\end{enumerate}
+
+\section*{Integration with Finder}
+You can now sign, encrypt, and decrypt files in Finder using your new
+key.
+
+\begin{enumerate}
+\item Open the directory containing the file you want to sign,
+  encrypt, or decrypt.
+\item Select the file in Finder.
+\item\textbf{To sign the file:} Go to ``Finder$>$Services$>$OpenPGP:
+  Sign File''.
+\item\textbf{To encrypt the file:} Go to
+  ``Finder$>$Services$>$OpenPGP: Encrypt File''.
+\item\textbf{To decrypt the file:} Go to
+  ``Finder$>$Services$>$OpenPGP: Decrypt File''.
+\end{enumerate}
+
+\section*{Integration with Apple Mail}
+You should be able to sign messages with your new key, and encrypt
+messages to anyone whose public key you have.
+
+\begin{enumerate}
+\item Start composing a message.  You'll see two extra buttons in the
+  window: a lock and a star.
+\item\textbf{To sign your message:} (a good idea for all your
+  messages) make sure there is a check in the star button by clicking
+  it.
+\item\textbf{To encrypt your message:} (if you have the recipient's
+  public key) make sure the lock is closed by clicking it.
+\end{enumerate}
+
+You will also be able to receive and decrypt encrypted messages to
+your key, and verify signatures of signed messages if you have the
+sender's public key.  To do this, just open the message from your
+inbox.
+
+\section*{Signing Someone Else's Key}
+When you sign someone else's key, you are saying that you have
+verified that the information in the key is correct and that they own
+the key.  To do this, you will need to see photo identification.
+\textbf{Never, never sign a key if you haven't verified all of its
+  information!}
+
+Next, generally after the keysigning party, you do the actually
+keysigning.  You need to make sure that the person owns all the email
+addresses they say they do.  The way you verify this is a little
+convoluted: for each User ID, you sign it separately, export it, and
+send them encrypted to the email address you signed.  If the key has
+three User IDs, and the person only controls two of them, only those
+two emails can be encrypted, and so you will effectively only have
+signed those two!
+
+Unfortunately, the GPG Suite doesn't give a good way to do this.  You
+will need to do the following:
+
+\begin{enumerate}
+\item Once you have verified their name, download their public key by
+  going to ``Key$>$Retrieve from Keyserver\dots''.
+\item Export the original key by selecting it and clicking ``export''.
+\item Double click the key and go to the ``User IDs'' tab.
+\item For each User ID, do the following exactly:
+  \begin{enumerate}
+  \item Select the User ID.
+  \item Click the \texttt{+} button below the ``Signatures'' field.
+  \item Select how carefully you checked this key.  This should almost
+    always be either ``I will not answer'' (which is perfectly fine)
+    or ``I have done casual checking.''
+  \item You may uncheck the box that says ``Signature expires'' if you
+    want.  Most signatures do not expire.  It is slightly more secure
+    if your signature expires, but you will need to keep track of this
+    and go to another keysigning party with the person and repeat this
+    entire section again when resigning.
+  \item After generating the signature, close the ``Key Inspector''
+    window and export the new key as a separate file.
+  \item Encrypt this file, and send it by email to the email address
+    you just signed.
+  \item Delete the key from ``GPG Keychain Access'' by going to
+    ``Key$>$Delete,'' and import it again from the original file.  If
+    you do not do this, the next exported key will have more than one
+    User ID signed, which defeats the purpose of this!  Go back to the
+    ``Key Inspector'' window as above.
+  \end{enumerate}
+\item When the owner receives all the signatures, they will upload the
+  new key to a keyserver, which you can then download.
+\end{enumerate}
+
+\section*{Having Your Own Key Signed}
+If you are on the receiving end of the above process, be sure you
+bring a photo ID (or more!) and your key information with you to the
+keysigning.  Be sure to have written copies of your key id,
+fingerprint, and all your user IDs to give to the keysigner, so they
+can sign your key after the party.  You can find this by
+double-clicking on your key.
+
+Following the party, check your email addresses for encrypted messages
+with the signatures.  Decrypt the messages, and import the attachments
+into ``GPG Keychain Access''.  This will apply the signatures to your
+key.  Then, select the key and go to ``Key$>$Send public key to
+Keyserver'' so others can download the newly signed key.
+
+\newpage
+\part*{Getting Started with GPG on GNU/Linux or UNIX}
+Most GNU or UNIX systems come with GPG, either installed by default or
+in their package repositories.  This page assumes that you have
+installed GPG.  (As a hint, look for a package like \texttt{gpg},
+\texttt{gnupg}, or (in the case of Debian-derived systems)
+\texttt{gpg2}.)
+
+Most of the following are commands to be entered in the terminal.  (As
+a note, Debian-derived systems should use the \texttt{gpg2} command in
+place of the \texttt{gpg} command.)
+
+If in doubt, come on \texttt{\#opensourcecornell} on Freenode and ask
+for help!
+
+\section*{Setup GPG}
+Although the default settings for GPG are mostly acceptible, it is
+recommended that you change some of the settings for better security.
+To do so, open up the file \url{~/.gnupg/gpg.conf} in your favorite
+editor and do the following:
+
+\begin{enumerate}
+\item Search for a line that looks like \texttt{\#keyserver
+    hkp://keys.gnupg.net}.  Comment all such lines out, and add the
+  following line below it:
+
+  \begin{lstlisting}
+    keyserver hkps://hkps.pool.sks-keyservers.net
+  \end{lstlisting}
+\item At the end of the file, add the following lines:
+
+  \begin{lstlisting}
+    personal-cipher-preferences AES256 TWOFISH AES192 AES
+    personal-digest-preferences SHA512 SHA384 SHA256
+    personal-compress-preferences ZLIB BZIP2 ZIP
+    cert-digest-algo SHA256
+  \end{lstlisting}
+\end{enumerate}
+\section*{Setup Keypair}
+
+\begin{enumerate}
+\item Open a terminal.
+\item Run the command \texttt{gpg -{}-gen-key}
+\item When prompted, select option 1, ``RSA and RSA (default)''.
+\item Use 4096 bits instead of the default.
+\item Give an expiration date for the key (2y or 3y is a good choice).
+  This can always be changed later, but it's good if you lose the key
+  at any point in the future.  \textbf{Take note of when your key
+    expires!  You can always change the expiration date later!}
+\item Enter your name, enter your email address, but do not enter a
+  comment.
+\item Enter a passphrase and wait for the key to be generated.  This
+  passphrase is the last line of defense if your private key is
+  compromised, and you will need to enter it when you sign or decrypt
+  messages.  \textbf{Do not forget this passphrase!}
+\item Once your keypair has been generated, take note of the key ID
+  that was printed to the terminal (it will look like \texttt{pub
+    4096R/KEYID}).  Next, run the command \texttt{gpg -o revcert.asc
+    -{}-gen-revoke \{KEYID\}}.  This will generate a revocation
+  certificate, which allows you revoke this key if it ever gets
+  stolen.  Don't give a reason (this is in case anything ever
+  happens).  Keep it in a secure place (not, for instance, right in
+  your home directory).
+\item If you have more email addresses and names that you plan to use
+  this key under, run the command \texttt{gpg -{}-edit-key \{KEYID\}}.
+  At the prompt that appears, type \texttt{adduid}.  Again, enter your
+  name and email (and no comment).  Do this for each email you want to
+  add.  When you are done, select the primary user ID by running the
+  commands \texttt{uid \{UID NUMBER\}} and \texttt{primary}.  Exit by
+  typing \texttt{quit}, and be sure to save your changes.
+\item When you are done setting up your key, run the command
+  \texttt{gpg -{}-send-key \{KEYID\}} to submit your public key to the
+  keyserver we set up.
+\end{enumerate}
+
+\section*{Signing, Verifying, Encrypting, and Decrypting Files}
+You can now use the \texttt{gpg} command to sign, verify, encrypt, and
+decrypt files:
+
+\begin{lstlisting}
+$ gpg -s filename             # Sign a file, makes filename.gpg
+$ gpg --clearsign -a filename # Sign file in same file, makes filename.asc
+$ gpg --verify filename.asc   # Verify a signature or clearsigned message
+$ gpg -e filename             # Encrypt a file, makes filename.gpg
+$ gpg -d filename.gpg         # Decrypt a file and print its contents
+\end{lstlisting}
+
+\section*{Integration with Thunderbird, Evolution, etc.}
+Thunderbird, Mutt, Evolution, and KMail all integrate with GPG very
+easily, but there isn't enough space here to describe how.  Either
+Google it (Thunderbird uses something called Enigmail, the others do
+so natively) or ask one of us to help.
+
+\section*{Signing Someone Else's Key}
+When you sign someone else's key, you are saying that you have
+verified that the information in the key is correct and that they own
+the key.  To do this, you will need to see photo identification.
+\textbf{Never, never sign a key if you haven't verified all of its
+  information!}
+
+Next, generally after the keysigning party, you do the actually
+keysigning.  You need to make sure that the person owns all the email
+addresses they say they do.  The way you verify this is a little
+convoluted: for each User ID, you sign it separately, export it, and
+send them encrypted to the email address you signed.  If the key has
+three User IDs, and the person only controls two of them, only those
+two emails can be encrypted, and so you will effectively only have
+signed those two!
+
+Follow these steps:
+
+\begin{enumerate}
+\item Once you have verified their name, download their public key
+  running \texttt{gpg -{}-recv-keys \{THEIRKEYID\}}
+\item Export the original key by running \texttt{gpg -{}-armor -o
+    key.orig -{}-export \{THEIRKEYID\}}
+\item For each User ID, do the following exactly:
+  \begin{enumerate}
+  \item Run \texttt{gpg -{}-edit-key \{THEIRKEYID\}}, and at the
+    prompt, type \texttt{uid \{UIDNUMBERTOSIGN\}}.
+  \item Type \texttt{sign} to sign the user ID, and then \texttt{quit}
+    to exit this prompt.
+  \item Export this key to a different file: \texttt{gpg -{}-armor -o
+      key.uid\textit{n}signed -{}-export \{THEIRKEYID\}}.
+  \item Encrypt this file, and send it by email to the email address
+    you just signed.
+  \item Delete the signed key (\texttt{gpg -{}-delete-keys
+      \{THEIRKEYID\}}) and reimport the original (\texttt{gpg
+      -{}-import key.orig}).  If you don't do this, the next exported
+    key will have more than one User ID signed, which defeats the
+    purpose of this!  Repeat for the remaining User IDs.
+  \end{enumerate}
+\item When the owner receives all the signatures, they will upload the
+  new key to a keyserver, which you can then download.
+\end{enumerate}
+
+\section*{Having Your Own Key Signed}
+If you are on the receiving end of the above process, be sure you
+bring a photo ID (or more!) and your key information with you to the
+keysigning.  Be sure to have written copies of your key id,
+fingerprint, and all your user IDs to give to the keysigner, so they
+can sign your key after the party.
+
+Following the party, check your email addresses for encrypted messages
+with the signatures.  Decrypt the messages, and import the attachments
+using \texttt{gpg -{}-import filename}.  This will apply the
+signatures to your key.  Then, send the newly signed key to a
+keyserver so others can download it by running the command \texttt{gpg
+  -{}-send-keys \{KEYID\}}.
+
+\newpage
+\part*{Getting Started with GPG on Windows}
+To use GPG on Windows, you'll be using the GPG4Win distribution.  Most
+of the following are commands to be entered in the command prompt.
+The full distribution of GPG4Win has a GUI application to generate
+keys, but it is not reliable and is rather buggy, so we suggest you
+just use the command line version for generating keys.
+
+If in doubt, come on \texttt{\#opensourcecornell} on Freenode and ask
+for help!
+
+\section*{Install and Setup GPG4Win}
+\begin{enumerate}
+\item In your browser, navigate to \url{http://www.gpg4win.org/} and
+  click on the download link.  You can download GPG4Win Lite, which
+  does not contain the graphical key manager program (which is what we
+  recommend, because it is very buggy on Windows) or the full GPG4Win
+  version.  Either way, you will be creating your key from the command
+  line, to ensure the key is made properly.
+\item Follow the steps through the installation, and use the default
+  steps.
+\end{enumerate}
+
+Although the default settings for GPG are mostly acceptible, it is
+recommended that you change some of the settings for better security.
+To do so, open up the file
+\url{C:\Users\{User}\AppData\Roaming\gnupg\gpg.conf} in
+your favorite editor and do the following:
+
+\begin{enumerate}
+\item Search for a line that looks like \texttt{\#keyserver
+    hkp://keys.gnupg.net}.  Comment all such lines out, and add the
+  following line below it:
+
+  \begin{lstlisting}
+    keyserver hkps://hkps.pool.sks-keyservers.net
+  \end{lstlisting}
+\item At the end of the file, add the following lines:
+
+  \begin{lstlisting}
+    personal-cipher-preferences AES256 TWOFISH AES192 AES
+    personal-digest-preferences SHA512 SHA384 SHA256
+    personal-compress-preferences ZLIB BZIP2 ZIP
+    cert-digest-algo SHA256
+  \end{lstlisting}
+\end{enumerate}
+\section*{Setup Keypair}
+
+\begin{enumerate}
+\item Open a command prompt and run the command \texttt{gpg -{}-gen-key}
+\item When prompted, select option 1, ``RSA and RSA (default)''.
+\item Use 4096 bits instead of the default.
+\item Give an expiration date for the key (2y or 3y is a good choice).
+  This can always be changed later, but it's good if you lose the key
+  at any point in the future.  \textbf{Take note of when your key
+    expires!  You can always change the expiration date later!}
+\item Enter your name, enter your email address, but do not enter a
+  comment.
+\item Enter a passphrase and wait for the key to be generated.  This
+  passphrase is the last line of defense if your private key is
+  compromised, and you will need to enter it when you sign or decrypt
+  messages.  \textbf{Do not forget this passphrase!}
+\item Once your keypair has been generated, take note of the key ID
+  that was printed to the terminal (it will look like \texttt{pub
+    4096R/KEYID}).  Next, run the command \texttt{gpg -o revcert.asc
+    -{}-gen-revoke \{KEYID\}}.  This will generate a revocation
+  certificate, which allows you revoke this key if it ever gets
+  stolen.  Don't give a reason (this is in case anything ever
+  happens).  Keep it in a secure place (not, for instance, right in
+  your home directory).
+\item If you have more email addresses and names that you plan to use
+  this key under, run the command \texttt{gpg -{}-edit-key \{KEYID\}}.
+  At the prompt that appears, type \texttt{adduid}.  Again, enter your
+  name and email (and no comment).  Do this for each email you want to
+  add.  When you are done, select the primary user ID by running the
+  commands \texttt{uid \{UID NUMBER\}} and \texttt{primary}.  Exit by
+  typing \texttt{quit}, and be sure to save your changes.
+\item When you are done setting up your key, run the command
+  \texttt{gpg -{}-send-key \{KEYID\}} to submit your public key to the
+  keyserver we set up.
+\end{enumerate}
+
+\section*{Signing, Verifying, Encrypting, and Decrypting Files}
+You can now use the \texttt{gpg} command to sign, verify, encrypt, and
+decrypt files:
+
+\begin{lstlisting}
+$ gpg -s filename             # Sign a file, makes filename.gpg
+$ gpg --clearsign -a filename # Sign file in same file, makes filename.asc
+$ gpg --verify filename.asc   # Verify a signature or clearsigned message
+$ gpg -e filename             # Encrypt a file, makes filename.gpg
+$ gpg -d filename.gpg         # Decrypt a file and print its contents
+\end{lstlisting}
+
+Additionally, if you navigate to any of the files in Windows Explorer
+and right-click, you should see options to do all of the above.
+
+\section*{Integration with Outlook, Thunderbird, etc.}
+GPG4Win comes with an Outlook plugin to allow you to use GPG when
+sending emails.  This should be installed automatically if you have
+Outlook installed.  Thunderbird integrates with GPG very easily, but
+there isn't enough space here to describe how.  Either Google it
+(Thunderbird uses something called Enigmail) or ask one of us to help.
+
+\section*{Signing Someone Else's Key}
+When you sign someone else's key, you are saying that you have
+verified that the information in the key is correct and that they own
+the key.  To do this, you will need to see photo identification.
+\textbf{Never, never sign a key if you haven't verified all of its
+  information!}
+
+Next, generally after the keysigning party, you do the actually
+keysigning.  You need to make sure that the person owns all the email
+addresses they say they do.  The way you verify this is a little
+convoluted: for each User ID, you sign it separately, export it, and
+send them encrypted to the email address you signed.  If the key has
+three User IDs, and the person only controls two of them, only those
+two emails can be encrypted, and so you will effectively only have
+signed those two!
+
+Follow these steps:
+
+\begin{enumerate}
+\item Once you have verified their name, download their public key
+  running \texttt{gpg -{}-recv-keys \{THEIRKEYID\}}
+\item Export the original key by running \texttt{gpg -{}-armor -o
+    key.orig -{}-export \{THEIRKEYID\}}
+\item For each User ID, do the following exactly:
+  \begin{enumerate}
+  \item Run \texttt{gpg -{}-edit-key \{THEIRKEYID\}}, and at the
+    prompt, type \texttt{uid \{UIDNUMBERTOSIGN\}}.
+  \item Type \texttt{sign} to sign the user ID, and then \texttt{quit}
+    to exit this prompt.
+  \item Export this key to a different file: \texttt{gpg -{}-armor -o
+      key.uid\textit{n}signed -{}-export \{THEIRKEYID\}}.
+  \item Encrypt this file, and send it by email to the email address
+    you just signed.
+  \item Delete the signed key (\texttt{gpg -{}-delete-keys
+      \{THEIRKEYID\}}) and reimport the original (\texttt{gpg
+      -{}-import key.orig}).  If you don't do this, the next exported
+    key will have more than one User ID signed, which defeats the
+    purpose of this!  Repeat for the remaining User IDs.
+  \end{enumerate}
+\item When the owner receives all the signatures, they will upload the
+  new key to a keyserver, which you can then download.
+\end{enumerate}
+
+\section*{Having Your Own Key Signed}
+If you are on the receiving end of the above process, be sure you
+bring a photo ID (or more!) and your key information with you to the
+keysigning.  Be sure to have written copies of your key id,
+fingerprint, and all your user IDs to give to the keysigner, so they
+can sign your key after the party.
+
+Following the party, check your email addresses for encrypted messages
+with the signatures.  Decrypt the messages, and import the attachments
+using \texttt{gpg -{}-import filename}.  This will apply the
+signatures to your key.  Then, send the newly signed key to a
+keyserver so others can download it by running the command \texttt{gpg
+  -{}-send-keys \{KEYID\}}.
+
+\end{document}
